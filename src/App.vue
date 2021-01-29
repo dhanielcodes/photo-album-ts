@@ -1,20 +1,35 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
+  <div>
+   <div v-for="(item, idx) in pictures" :key="idx">
+    {{item}}
+   </div>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { mapActions } from 'vuex'
+import { defineComponent, ref } from 'vue';
+import { mapActions, mapGetters } from 'vuex'
 
 export default defineComponent({
   name: 'App',
+  data() {
+    return {
+    }
+  },
   methods:{
     ...mapActions({
       load: 'photos/getPhotos'
     })
   },
+  computed:{
+    ...mapGetters({
+      pictures: "photos/pics"
+    })
+  },
   created(){
     this.load()
+    console.log(this.pictures)
   }
 
 });
