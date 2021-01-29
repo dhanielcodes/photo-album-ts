@@ -1,38 +1,45 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
+  <img alt="Vue logo" src="./assets/logo.png" />
+  <input type="text" v-model="search" placeholder="search" name="" id="" />
   <div>
-   <div v-for="(item, idx) in pictures" :key="idx">
-    {{item}}
-   </div>
+    <div v-for="(item, idx) in pics" :key="idx">
+      {{ item.alt_description }}
+      <img :src="item.urls.regular" alt="" sizes="" srcset="" />
+    </div>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from 'vue';
-import { mapActions, mapGetters } from 'vuex'
+<script>
+import { mapActions, mapGetters } from "vuex";
 
-export default defineComponent({
-  name: 'App',
+export default {
   data() {
     return {
-    }
+      search: "",
+      pictures: [],
+    };
   },
-  methods:{
-    ...mapActions({
-      load: 'photos/getPhotos'
-    })
-  },
-  computed:{
+  computed: {
     ...mapGetters({
-      pictures: "photos/pics"
-    })
+      pics: "photos/searched",
+    }),
+    searched() {
+      return this.pictures.filter((x) => {
+        return x.alt_description.toUpperCase().match(this.search.toUpperCase());
+      });
+    },
   },
-  created(){
-    this.load()
-    console.log(this.pictures)
-  }
-
-});
+  methods: {
+    ...mapActions({
+      load: "photos/getPhotos",
+    }),
+  },
+  created() {
+    this.load();
+    console.log(this.pics);
+    this.pictures = this.pics;
+  },
+};
 </script>
 
 <style>
